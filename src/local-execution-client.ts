@@ -222,10 +222,10 @@ export class LocalDesktopCommanderClient {
 
     try {
       const result = await this.backend.callClientTool(toolName, args, {
+        ...(request.metadata ?? {}),
         remote: false,
         execution_plane: 'local',
         call_id: callId,
-        ...(request.metadata ?? {}),
       });
       const completedAt = new Date().toISOString();
       const failed = result?.isError === true;

@@ -54,7 +54,12 @@ async function testSuccessReceipt() {
     callId: 'call-success-001',
     toolName: 'list_processes',
     args: { query: 'sensitive-argument-body' },
-    metadata: { mission_id: 'mission-001' },
+    metadata: {
+      mission_id: 'mission-001',
+      remote: true,
+      execution_plane: 'hosted',
+      call_id: 'caller-overridden-id',
+    },
   });
 
   assert.equal(outcome.receipt.protocol, LOCAL_EXECUTION_RECEIPT_PROTOCOL);
@@ -71,6 +76,7 @@ async function testSuccessReceipt() {
   assert.equal(backend.lastCall.metadata.remote, false);
   assert.equal(backend.lastCall.metadata.execution_plane, 'local');
   assert.equal(backend.lastCall.metadata.call_id, 'call-success-001');
+  assert.equal(backend.lastCall.metadata.mission_id, 'mission-001');
   const durable = JSON.stringify(outcome.receipt);
   assert.equal(durable.includes('sensitive-argument-body'), false);
   assert.equal(durable.includes('sensitive-result-body'), false);
